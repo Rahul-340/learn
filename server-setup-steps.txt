@@ -1,0 +1,101 @@
+Update the package repository and install updates
+- sudo yum update -y
+
+
+Setup a password For SFTP
+------------------------------------------
+- sudo passwd ec2-user
+	enter password
+	re-enter password
+- sudo vi /etc/ssh/sshd_config
+	PasswordAuthentication yes
+- sudo service sshd restart
+
+
+Install the Apache
+--------------------------
+Install the Apache web server using Yum
+- sudo yum install httpd -y
+
+Start the Apache service:
+- sudo systemctl start httpd
+
+Enable Apache to start on boot
+- sudo systemctl enable httpd
+
+
+Install MariaDB
+----------------------
+Update the package repository and install updates:
+- sudo yum update -y
+
+Install the MariaDB server package using Yum:
+- sudo yum install mariadb-server -y
+
+Start the MariaDB service:
+- sudo systemctl start mariadb
+
+Enable MariaDB to start on boot:
+- sudo systemctl enable mariadb
+
+Secure MariaDB Installation:
+(set user or pass for MySQL and other configuration)
+- sudo mysql_secure_installation
+
+After securing MariaDB, you can access it 
+mysql -u root -p
+
+
+Install phpMyAdmin:
+-------------------------------
+Add the EPEL repository (Extra Packages for Enterprise Linux):
+- sudo yum install epel-release -y
+
+Add [epel] baseUrl
+- sudo nano /etc/yum.repos.d/epel.repo
+[epel]
+name=Extra Packages for Enterprise Linux 7 - $basearch
+baseurl=http://mirror.centos.org/centos/7/extras/x86_64/
+enabled=1
+gpgcheck=1
+gpgkey=https://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+
+Install phpMyAdmin using Yum:
+- sudo yum install phpmyadmin -y
+
+Edit the phpMyAdmin configuration file:
+- sudo nano /etc/httpd/conf.d/phpMyAdmin.conf
+<Directory /usr/share/phpMyAdmin/>
+    AddDefaultCharset UTF-8
+    <IfModule mod_authz_core.c>
+        # Apache 2.4
+        Require ip your-ip-address
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        # Apache 2.2
+        Order Deny,Allow
+        Deny from All
+        Allow from your-ip-address
+        Allow from ::1
+    </IfModule>
+</Directory>
+
+
+Restart Apache for the changes to take effect:
+- sudo systemctl restart httpd
+- sudo systemctl status httpd
+
+
+Laravel routes not working on live server — returning 404–2023- AWS EC2
+------------------------------------------------------------------------------------------------------------
+https://medium.com/@mkhanops/laravel-routes-not-working-on-live-server-returning-404-2023-aws-ec2-9f6bc122c56d
+
+
+Give mysql dataase Access Permition To another User
+-----------------------------------------------------------
+GRANT ALL PRIVILEGES ON your_database.* TO 'root1'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+Change PAssword For MySQL DATABASE
+-----------------------------------------------------------------
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTION;
